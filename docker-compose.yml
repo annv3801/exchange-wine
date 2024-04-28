@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  exchange_wine_1:
+    container_name: exchange_wine_1_lasest
+    image: exchange_wine_1_lasest
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        progress: plain
+    command: serve -l 19067 /app/build -s
+    ports:
+      - "19067:19067"
+    restart: always
