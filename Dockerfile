@@ -1,21 +1,15 @@
-# Start from the official Node.js LTS image
-FROM node:18
+FROM node:18-alpine
 
-# Set the working directory
 WORKDIR /app
-EXPOSE 19067
-# Copy package.json and package-lock.json before other files
-# Utilise Docker cache to save re-installing dependencies if unchanged
-COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+COPY package.json yarn.lock ./
+RUN apk add --no-cache git \
+    && yarn install --frozen-lockfile \
+    && yarn cache clean
 
-# Copy all files
 COPY . .
+RUN yarn build
 
-# Build the Next.js app
-RUN npm run build
+EXPOSE 19067
 
-# Run npm start script
-CMD [ "npm", "run", "dev" ]
+CMD ["yarn", "start"]
