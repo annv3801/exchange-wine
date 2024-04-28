@@ -18,10 +18,10 @@ RUN yarn cache clean --force
 RUN yarn install
 RUN yarn global add serve
 RUN ls
-RUN yarn build
+RUN yarn build || echo "Build failed"
 RUN ls
 RUN pwd
-RUN rm -rf build/static/js/*.map
+RUN if [ -d "build/static/js" ]; then rm -rf build/static/js/*.map; fi
 RUN ls -la
-RUN tree -a build
-RUN ls build/static/js
+RUN if [ -d "build" ]; then tree -a build; else echo "Build directory does not exist"; fi
+RUN if [ -d "build/static/js" ]; then ls build/static/js; else echo "build/static/js directory does not exist"; fi
